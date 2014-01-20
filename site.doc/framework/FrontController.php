@@ -4,7 +4,7 @@ class SuFrontController  {
 	private $controller;
 	private $action;
 	public function __construct()  {
-		echo "including FrontController\n";
+		echo "including FrontController<Br \>";
 		$this->ins = null;
 	}
 	public static function getInstance()  {
@@ -22,6 +22,11 @@ class SuFrontController  {
 			if(array_key_exists('action',$_GET))  {
 				$this->action = strtolower($_GET['action'])."Action";
 			}
+		}
+		$controller_file = './controllers/'.$this->controller.'.php';
+		//echo $controller_file;
+		if(file_exists($controller_file))  {
+			require_once $controller_file;
 		}
 		echo $this->controller;
 		echo $this->action;
