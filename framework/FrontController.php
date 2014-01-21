@@ -2,6 +2,9 @@
 require_once './framework/conf/conventions.php';
 require_once './framework/Controller.php';
 require_once './framework/Behavior.php';
+require_once './framework/ExceptionHandler.php';
+
+set_exception_handler('SuException');
 
 class SuFrontController  {
 	private static $_instance;
@@ -36,11 +39,17 @@ class SuFrontController  {
 			for($j=0;$j<count($this->behaviors);$j++)  {
 				require_once './behaviors/'.$this->behaviors[$j].'.php';
 				$tmpbehavior = new $this->behaviors[$j];
+				if(!($tmpbehavior instanceof IBehavior))  {
+					echo "the behavior class is not implements from IBehavior interface.";
+				}
 				$tmpbehavior::run();
 			}
 		}
 	}
 	public function dispatch()  {
+		//load global constants from user-define config file.
+		if(file_exists('./conf/config.php'))
+			require_once './conf/config.php';
 		if(array_key_exists('controller',$_GET))  {
 			$this->controller = ucfirst(strtolower($_GET['controller']))."Controller";
 			if(array_key_exists('action',$_GET))  {
@@ -53,6 +62,9 @@ class SuFrontController  {
 			if(file_exists($controller_file))  {
 				require_once $controller_file;
 			}
+			else  {
+				throw new Exception("Error Controller Name", 1);
+			}
 		}	
 		if($DEBUG)  {
 			echo $this->controller;
@@ -60,8 +72,15 @@ class SuFrontController  {
 		}
 		// preDispatch
 		$this->predispatch();
-		$controller = new $this->controller();
-		$tmp = $this->action;
+		if(class_exists($this->controller))
+			$controller = new $this->controller();
+		else
+			throw new Exception("Controller class no found...", 1);
+
+		if(method_exists($controller, $this->action))
+			$tmp = $this->action;
+		else
+			throw new Exception("Error Action Name", 1);
 		$controller->$tmp();
 	}
 }
