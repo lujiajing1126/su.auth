@@ -8,24 +8,22 @@ SuFramework
 
 > It's a easy-to-use, flexible, light framework designer for su dev
 
-URL pattern
-------
+### URL pattern
 
 ```
 Http://localhost:8000/auth/index.php?controller=index&action=index
 ```
 
-FrontController
---
+### FrontController
 
 in the entrance of the website, index.php, you must require the frontcontroller and get an instance of it and finally dispatch the request...
 
-Controller
---
+### Controller
+
 
 you must touch a file named after XyyyController such as IndexController and create a php class with the same name of filename
 
-the 
+the class must extends `SuController`
 
 for example:
 
@@ -38,11 +36,11 @@ class IndexController extends SuController  {
 
 ```
 
-View
---
+### View
 
 we use twig as our template engine.
 
-Model
---
+
+### Model
+
 we use doctrine as our ORM engine.
