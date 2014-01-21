@@ -1,6 +1,11 @@
 <?php
 require_once 'framework/FrontController.php';
-//require_once 'controllers/IndexController.php';
 
+//get instance of FrontController
 $frontcontroller = SuFrontController::getInstance();
+
+//register custom Behaviors
+$frontcontroller->registerBehavior('PreAuth');
+
+//dispatch the request
 $frontcontroller->dispatch();

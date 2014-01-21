@@ -1,7 +1,11 @@
 <?php
-require_once '../../su.prog/phplib/composer/vendor/autoload.php';
+require_once 'framework/FrontController.php';
 
-$loader = new Twig_Loader_Filesystem('./templates');
-$twig = new Twig_Environment($loader);
+//get instance of FrontController
+$frontcontroller = SuFrontController::getInstance();
 
-echo $twig->render('reg.html', array('name' => 'Fabien'));
+//register custom Behaviors
+//$frontcontroller->registerBehavior('PreAuth');
+
+//dispatch the request
+$frontcontroller->dispatch();
